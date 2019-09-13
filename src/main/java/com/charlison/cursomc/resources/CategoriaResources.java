@@ -1,6 +1,8 @@
 package com.charlison.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.charlison.cursomc.domain.Categoria;
+import com.charlison.cursomc.dto.CategoriaDTO;
 import com.charlison.cursomc.services.CategoriaServices;
 
 @RestController
@@ -27,6 +30,14 @@ public class CategoriaResources {
 
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> find() {
+
+		List <Categoria> lista = service.findAll();
+		List <CategoriaDTO> listDTO = lista.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
